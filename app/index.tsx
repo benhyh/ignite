@@ -45,7 +45,7 @@ export default function Index() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#2E2E2E", justifyContent: "center", alignItems: "center" }}>
-      <Image source={require('@/assets/images/logo-2.png')} style={{ width: 200, height: 200}} />
+      <Image source={require('@/assets/images/logo-3.png')} style={{ width: 300, height: 300}} />
       <TouchableOpacity 
         style={[
           styles.button,
