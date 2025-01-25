@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useState } from 'react';
 import { router } from 'expo-router';
+import PostQuestionnaire from './post-questionnaire';
 
 export default function Questionnaire() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showPostQuestionnaire, setShowPostQuestionnaire] = useState(false);
 
   const questions = [
     {
@@ -32,22 +34,33 @@ export default function Questionnaire() {
     },
   ];
 
+  {/* Post-Questionnaire Screen */}
+  if (showPostQuestionnaire) {
+    return <PostQuestionnaire />;
+  }
+
   return (
     <View style={styles.container}>
+      {/* Illustration Container */}
       <View style={styles.illustrationContainer}>
         <Text style={styles.illustrationPlaceholder}>
           {questions[currentIndex].image}
         </Text>
       </View>
       
+      {/* Questionnaire Title */}
       <Text style={styles.title}>{questions[currentIndex].title}</Text>
       
+      {/* Questionnaire Buttons */}
       <View style={styles.buttonContainer}>
         <Pressable 
           style={styles.button}
           onPress={() => {
             if (currentIndex + 1 >= questions.length) {
-              router.replace('/sign-in');
+              setShowPostQuestionnaire(true);
+              setTimeout(() => {
+                router.replace('/sign-in');
+              }, 3000);
               return;
             }
             setCurrentIndex(prev => prev + 1);
@@ -60,7 +73,10 @@ export default function Questionnaire() {
           style={styles.button}
           onPress={() => {
             if (currentIndex + 1 >= questions.length) {
-              router.replace('/sign-in');
+              setShowPostQuestionnaire(true);
+              setTimeout(() => {
+                router.replace('/sign-in');
+              }, 3000);
               return;
             }
             setCurrentIndex(prev => prev + 1);
