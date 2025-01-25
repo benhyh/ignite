@@ -32,5 +32,18 @@ export default function RootLayout() {
         headerTitleAlign: 'center', 
       }}
     />
+    {/* Questionnaire Page */}
+    <Stack.Screen
+      name="questionnaire"
+      options={{ 
+        title: "",
+        headerStyle: {
+          backgroundColor: '#2E2E2E',
+          borderBottomWidth: 0, 
+        },
+        headerTintColor: '#fff',
+        headerTitleAlign: 'center', 
+      }}
+    />
   </Stack>;
 }

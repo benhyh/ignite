@@ -20,7 +20,8 @@ export default function SignIn() {
             source={require('../assets/icons/google.png')} 
             style={[styles.icon]} 
           />
-          <Text style={[styles.text]}>Continue with Google</Text>
+          <Text style={[styles.text]}>
+             with Google</Text>
         </View>
       </TouchableOpacity>
       {/* Facebook Button */}
