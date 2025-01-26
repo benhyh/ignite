@@ -1,4 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { router } from 'expo-router';
+
 
 export default function SignIn() {
   return (
@@ -20,8 +22,7 @@ export default function SignIn() {
             source={require('../assets/icons/google.png')} 
             style={[styles.icon]} 
           />
-          <Text style={[styles.text]}>
-             with Google</Text>
+          <Text style={[styles.text]}>Continue with Google</Text>
         </View>
       </TouchableOpacity>
       {/* Facebook Button */}
@@ -35,7 +36,9 @@ export default function SignIn() {
         </View>
       </TouchableOpacity>
       {/* Email Button */}
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => router.push("/email-login")}  
+      >
         <View style={[styles.buttonContainer, styles.emailButton]}>
           <Image 
             source={require('../assets/icons/email.png')} 

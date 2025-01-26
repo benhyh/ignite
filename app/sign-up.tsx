@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity } from "react-native";
 import { router } from 'expo-router';
 
-
 export default function SignUp() {
     return (
         <View style={styles.wrapper}>
