@@ -5,6 +5,12 @@
 
 Ignite is a brain training app designed to spark cognitive potential through quick, engaging, and scientifically-backed games. Our focus is on making brain training accessible, enjoyable, and part of your daily routine.
 
+## Tech Stack
+- Frontend: React Native with TypeScript, Expo and Expo Router
+- Backend/Database: Supabase
+- UI Framework: React Native Paper
+- AI Processing: DeepSeek
+
 ## Core Features
 
 ### 🎯 Quick Training Sessions
@@ -124,3 +130,204 @@ Grid-based memory challenges with progressive difficulty
 6. Virtual coaching system
 7. Brain health insights dashboard
 8. Community-created challenges
+
+## Database Schema
+
+### Users Table
+```sql
+users (
+  id: uuid primary key
+  email: string unique
+  username: string unique
+  avatar_url: string nullable
+  created_at: timestamp
+  updated_at: timestamp
+  last_login: timestamp
+  is_premium: boolean
+  streak_count: integer
+  total_spark_score: integer
+  settings: jsonb
+)
+```
+
+### Games Table
+```sql
+games (
+  id: uuid primary key
+  name: string
+  category: enum('CRITICAL_THINKING', 'MEMORY', 'FOCUS', 'SPEED')
+  difficulty: enum('BEGINNER', 'INTERMEDIATE', 'ADVANCED')
+  description: text
+  instructions: text
+  thumbnail_url: string
+  is_premium: boolean
+  created_at: timestamp
+  updated_at: timestamp
+)
+```
+
+### UserGameProgress Table
+```sql
+user_game_progress (
+  id: uuid primary key
+  user_id: uuid foreign key refs users(id)
+  game_id: uuid foreign key refs games(id)
+  highest_score: integer
+  games_played: integer
+  total_time_spent: integer
+  last_played_at: timestamp
+  created_at: timestamp
+  updated_at: timestamp
+)
+```
+
+### GameSessions Table
+```sql
+game_sessions (
+  id: uuid primary key
+  user_id: uuid foreign key refs users(id)
+  game_id: uuid foreign key refs games(id)
+  score: integer
+  duration: integer
+  completed_at: timestamp
+  performance_data: jsonb
+  created_at: timestamp
+)
+```
+
+### Achievements Table
+```sql
+achievements (
+  id: uuid primary key
+  name: string
+  description: text
+  icon_url: string
+  category: string
+  points: integer
+  created_at: timestamp
+)
+```
+
+### UserAchievements Table
+```sql
+user_achievements (
+  id: uuid primary key
+  user_id: uuid foreign key refs users(id)
+  achievement_id: uuid foreign key refs achievements(id)
+  unlocked_at: timestamp
+  created_at: timestamp
+)
+```
+
+### Friends Table
+```sql
+friends (
+  id: uuid primary key
+  user_id: uuid foreign key refs users(id)
+  friend_id: uuid foreign key refs users(id)
+  status: enum('PENDING', 'ACCEPTED', 'BLOCKED')
+  created_at: timestamp
+  updated_at: timestamp
+)
+```
+
+### Challenges Table
+```sql
+challenges (
+  id: uuid primary key
+  creator_id: uuid foreign key refs users(id)
+  game_id: uuid foreign key refs games(id)
+  title: string
+  description: text
+  start_date: timestamp
+  end_date: timestamp
+  reward_points: integer
+  status: enum('ACTIVE', 'COMPLETED', 'CANCELLED')
+  created_at: timestamp
+  updated_at: timestamp
+)
+```
+
+### UserChallenges Table
+```sql
+user_challenges (
+  id: uuid primary key
+  user_id: uuid foreign key refs users(id)
+  challenge_id: uuid foreign key refs challenges(id)
+  score: integer
+  completed_at: timestamp nullable
+  created_at: timestamp
+)
+```
+
+### Subscriptions Table
+```sql
+subscriptions (
+  id: uuid primary key
+  user_id: uuid foreign key refs users(id)
+  plan_type: enum('MONTHLY', 'YEARLY')
+  status: enum('ACTIVE', 'CANCELLED', 'EXPIRED')
+  start_date: timestamp
+  end_date: timestamp
+  payment_status: enum('PAID', 'PENDING', 'FAILED')
+  created_at: timestamp
+  updated_at: timestamp
+)
+```
+
+## Project Structure
+```
+ignite/
+├── app/                      # Main application code
+│   ├── _layout.tsx          # Root layout component
+│   ├── index.tsx            # Home screen
+│   ├── (auth)/              # Authentication routes
+│   │   ├── sign-in.tsx
+│   │   ├── sign-up.tsx
+│   │   └── forgot-password.tsx
+│   ├── (games)/             # Game routes
+│   │   ├── _layout.tsx
+│   │   ├── index.tsx        # Games list
+│   │   └── [gameId]/        # Individual game routes
+│   ├── (profile)/           # Profile routes
+│   │   ├── _layout.tsx
+│   │   ├── index.tsx
+│   │   └── settings.tsx
+│   └── (social)/            # Social features
+│       ├── friends.tsx
+│       ├── leaderboard.tsx
+│       └── challenges.tsx
+├── assets/                   # Static assets
+│   ├── images/
+│   ├── fonts/
+│   └── animations/
+├── components/               # Reusable components
+│   ├── common/              # Shared components
+│   ├── games/               # Game-specific components
+│   ├── layout/              # Layout components
+│   └── ui/                  # UI components
+├── constants/               # App constants
+│   ├── theme.ts
+│   ├── config.ts
+│   └── api.ts
+├── hooks/                   # Custom React hooks
+├── lib/                     # Utility libraries
+│   ├── api/                # API integration
+│   ├── supabase/           # Supabase client
+│   └── analytics/          # Analytics integration
+├── services/               # Business logic
+│   ├── auth/
+│   ├── games/
+│   └── storage/
+├── store/                  # State management
+│   ├── atoms/
+│   └── selectors/
+├── types/                  # TypeScript types
+├── utils/                  # Helper functions
+├── docs/                   # Documentation
+│   └── CONTEXT.md
+├── .env.example           # Environment variables template
+├── app.json               # Expo config
+├── package.json           # Dependencies
+└── tsconfig.json          # TypeScript config
+```
