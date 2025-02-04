@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { router } from 'expo-router';
 import { signInWithEmail, signUpWithEmail } from '../../lib/supabase/client';
 import { useAuth } from '../../lib/context/auth';
+import { AuthErrorWithMessage } from '../../types/auth';
 
 export default function EmailLogin() {
   const { user } = useAuth();
@@ -10,11 +11,11 @@ export default function EmailLogin() {
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
 
-  // Redirect if user is already logged in
-  if (user) {
-    router.replace('/(tabs)/home');
-    return null;
-  }
+  useEffect(() => {
+    if (user) {
+      router.replace('/(tabs)/home');
+    }
+  }, [user]);
 
   const handleSubmit = async () => {
     try {
@@ -32,10 +33,14 @@ export default function EmailLogin() {
       if (isSignUp) {
         Alert.alert('Success', 'Please check your email to verify your account');
       }
-    } catch (error: any) {
-      Alert.alert('Error', error?.message || 'An error occurred');
+    } catch (error) {
+      const authError = error as AuthErrorWithMessage;
+      Alert.alert('Error', authError?.message || 'An error occurred');
     }
   };
+
+  // If user is logged in, render nothing while redirecting
+  if (user) return null;
 
   return (
     <KeyboardAvoidingView 

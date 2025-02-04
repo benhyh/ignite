@@ -2,24 +2,30 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-na
 import { router } from 'expo-router';
 import { signInWithOAuth } from '../../lib/supabase/client';
 import { useAuth } from '../../lib/context/auth';
+import { useEffect } from 'react';
+import { AuthErrorWithMessage } from '../../types/auth';
 
 export default function SignIn() {
   const { user } = useAuth();
 
-  // Redirect if user is already logged in
-  if (user) {
-    router.replace('/(tabs)/home');
-    return null;
-  }
+  useEffect(() => {
+    if (user) {
+      router.replace('/(tabs)/home');
+    }
+  }, [user]);
 
   const handleOAuthSignIn = async (provider: 'apple' | 'google' | 'facebook') => {
     try {
       const { error } = await signInWithOAuth(provider);
       if (error) throw error;
-    } catch (error: any) {
-      Alert.alert('Error', error?.message || 'An error occurred during sign in');
+    } catch (error) {
+      const authError = error as AuthErrorWithMessage;
+      Alert.alert('Error', authError?.message || 'An error occurred during sign in');
     }
   };
+
+  // If user is logged in, render nothing while redirecting
+  if (user) return null;
 
   return (
     <View style={[styles.container]}>
