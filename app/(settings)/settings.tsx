@@ -24,6 +24,7 @@ export default function Settings() {
   };
 
   return (
+    // authentication merge
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Settings</Text>
