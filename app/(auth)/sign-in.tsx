@@ -1,35 +1,53 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { router } from 'expo-router';
-
+import { signInWithOAuth } from '../../lib/supabase/client';
+import { useAuth } from '../../lib/context/auth';
 
 export default function SignIn() {
+  const { user } = useAuth();
+
+  // Redirect if user is already logged in
+  if (user) {
+    router.replace('/(tabs)/home');
+    return null;
+  }
+
+  const handleOAuthSignIn = async (provider: 'apple' | 'google' | 'facebook') => {
+    try {
+      const { error } = await signInWithOAuth(provider);
+      if (error) throw error;
+    } catch (error: any) {
+      Alert.alert('Error', error?.message || 'An error occurred during sign in');
+    }
+  };
+
   return (
     <View style={[styles.container]}>
       {/* Apple Button */}
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => handleOAuthSignIn('apple')}>
         <View style={[styles.buttonContainer, styles.appleButton]}>
           <Image 
-            source={require('../assets/icons/apple.png')} 
+            source={require('../../assets/icons/apple.png')} 
             style={[styles.icon]} 
           />
           <Text style={[styles.text]}>Continue with Apple</Text>
         </View>
       </TouchableOpacity>
       {/* Google Button */}
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => handleOAuthSignIn('google')}>
         <View style={[styles.buttonContainer, styles.googleButton]}>
           <Image 
-            source={require('../assets/icons/google.png')} 
+            source={require('../../assets/icons/google.png')} 
             style={[styles.icon]} 
           />
           <Text style={[styles.text]}>Continue with Google</Text>
         </View>
       </TouchableOpacity>
       {/* Facebook Button */}
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => handleOAuthSignIn('facebook')}>
         <View style={[styles.buttonContainer, styles.facebookButton]}>
           <Image 
-            source={require('../assets/icons/facebook.png')} 
+            source={require('../../assets/icons/facebook.png')} 
             style={[styles.icon]} 
           />
           <Text style={[styles.text]}>Continue with Facebook</Text>
@@ -41,7 +59,7 @@ export default function SignIn() {
       >
         <View style={[styles.buttonContainer, styles.emailButton]}>
           <Image 
-            source={require('../assets/icons/email.png')} 
+            source={require('../../assets/icons/email.png')} 
             style={[styles.icon]} 
           />
           <Text style={[styles.text]}>Continue with Email</Text>

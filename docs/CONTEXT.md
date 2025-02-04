@@ -9,6 +9,7 @@ Ignite is a brain training app designed to spark cognitive potential through qui
 - Frontend: React Native with TypeScript, Expo and Expo Router
 - Backend/Database: Supabase
 - UI Framework: React Native Paper
+- Paywall: Superwall
 - AI Processing: DeepSeek
 
 ## Core Features
@@ -130,7 +131,6 @@ Grid-based memory challenges with progressive difficulty
 6. Virtual coaching system
 7. Brain health insights dashboard
 8. Community-created challenges
-
 ## Database Schema
 
 ### Users Table
@@ -330,4 +330,6 @@ ignite/
 ├── app.json               # Expo config
 ├── package.json           # Dependencies
 └── tsconfig.json          # TypeScript config
+```
+
 ```
