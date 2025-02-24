@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useAuth } from '../../lib/context/auth';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 export default function Home() {
   const { user } = useAuth();
@@ -11,7 +12,7 @@ export default function Home() {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
         <Text style={styles.welcomeText}>Welcome back {firstName}</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.replace('/profile')}>
           <MaterialCommunityIcons name="account-circle" size={32} color="#FFF" />
         </TouchableOpacity>
       </View>

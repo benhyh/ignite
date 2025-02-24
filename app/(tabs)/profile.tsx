@@ -24,7 +24,7 @@ export default function Profile() {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Profile</Text>
         <TouchableOpacity onPress={() => router.push('/(settings)/notifications')}>
-          <MaterialCommunityIcons name="bell-outline" size={24} color="#FFF" />
+          <MaterialCommunityIcons name="bell" size={24} color="#FFF" />
         </TouchableOpacity>
       </View>
 

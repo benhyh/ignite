@@ -17,18 +17,13 @@ export default function Settings() {
       await signOut();
       // Reset the entire navigation state and redirect to index
       router.replace('/');
-      router.push('/');
     } catch (error) {
       console.error('Error signing out:', error);
     }
   };
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Settings</Text>
-      </View>
-
+    <View style={[styles.container]}>
       <ScrollView 
         style={styles.content}
         contentContainerStyle={[
