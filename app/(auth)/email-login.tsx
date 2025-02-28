@@ -20,7 +20,7 @@ export default function EmailLogin() {
   const handleSubmit = async () => {
     try {
       if (!email || !password) {
-        Alert.alert('Error', 'Please fill in all fields');
+        Alert.alert('Error', 'Please fill in all fields.');
         return;
       }
 
@@ -87,13 +87,6 @@ export default function EmailLogin() {
               ? 'Already have an account? Sign In' 
               : "Don't have an account? Sign Up"}
           </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Text style={styles.backButtonText}>Back to all sign in options</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>

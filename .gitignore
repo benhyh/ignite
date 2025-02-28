@@ -38,3 +38,5 @@ yarn-error.*
 # documentation
 docs/
 
+# reference 
+reference/

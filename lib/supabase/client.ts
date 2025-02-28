@@ -3,6 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 import { Database } from '../../types/supabase';
 import { Platform } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+import { makeRedirectUri } from 'expo-auth-session';
 
 const customStorage = {
   getItem: async (key: string) => {
@@ -51,6 +53,16 @@ const customStorage = {
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!;
 
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables. Please check your .env file.');
+}
+
+// Get the redirect URL for Expo
+const redirectUrl = makeRedirectUri({
+  scheme: 'com.brainhacks.ignite',
+  path: 'auth/callback'
+});
+
 const supabaseConfig = {
   auth: {
     storage: customStorage,
@@ -69,6 +81,7 @@ const createMockClient = () => ({
     signUp: async () => ({ data: { user: null, session: null }, error: null }),
     signInWithOAuth: async () => ({ data: { provider: null, url: null }, error: null }),
     signOut: async () => ({ error: null }),
+    setSession: async () => ({ data: { session: null }, error: null }),
     onAuthStateChange: () => ({
       data: { subscription: { unsubscribe: () => {} } },
       error: null,
@@ -109,14 +122,61 @@ export const signUpWithEmail = async (email: string, password: string) => {
   return { data, error };
 };
 
-export const signInWithOAuth = async (provider: 'google' | 'apple' | 'facebook') => {
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider,
-    options: {
-      redirectTo: 'ignite://auth/callback',
-    },
-  });
-  return { data, error };
+export const signInWithOAuth = async (provider: 'google' | 'apple') => {
+  try {
+    // Initialize WebBrowser
+    await WebBrowser.warmUpAsync();
+    
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: redirectUrl,
+        skipBrowserRedirect: true,
+      },
+    });
+
+    if (error) throw error;
+
+    if (data?.url) {
+      // Open browser for authentication
+      const result = await WebBrowser.openAuthSessionAsync(
+        data.url,
+        redirectUrl,
+        {
+          showInRecents: true,
+          preferEphemeralSession: true,
+        }
+      );
+
+      // Clean up browser resources
+      await WebBrowser.coolDownAsync();
+
+      if (result.type === 'success') {
+        const { url } = result;
+        if (url) {
+          const params = new URLSearchParams(url.split('#')[1]);
+          const access_token = params.get('access_token');
+          const refresh_token = params.get('refresh_token');
+
+          if (access_token && refresh_token) {
+            await supabase.auth.setSession({
+              access_token,
+              refresh_token,
+            });
+            return { data, error: null };
+          }
+        }
+      }
+    }
+
+    return { data: null, error: new Error('Authentication failed or was cancelled') };
+  } catch (error) {
+    console.error('OAuth error:', error);
+    return { 
+      data: null, 
+      error: error instanceof Error ? error : new Error('An unknown error occurred') 
+    };
+  }
 };
 
 export const signOut = async () => {

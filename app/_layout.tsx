@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function RootLayoutNav() {
+function RootLayoutNav() { 
   const { user } = useAuth();
 
   return (
@@ -26,6 +26,7 @@ function RootLayoutNav() {
       headerTintColor: '#fff',
       headerTitleAlign: 'center',
       headerTitle: '',
+      headerShadowVisible: false,
     }}>
       {user ? (
         // Authenticated routes
@@ -49,21 +50,6 @@ function RootLayoutNav() {
             name="(auth)"
             options={{
               headerShown: false,
-            }}
-          />
-
-          <Stack.Screen
-            name="sign-up"
-            options={{
-              headerBackTitle: '',
-            }}
-          />
-
-          <Stack.Screen
-            name="sign-in"
-            options={{
-              headerTitle: "Log in",
-              headerBackTitle: '',
             }}
           />
 
