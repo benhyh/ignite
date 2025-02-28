@@ -124,7 +124,8 @@ export const signUpWithEmail = async (email: string, password: string) => {
 
 export const signInWithOAuth = async (provider: 'google' | 'apple') => {
   try {
-    console.log('Redirect URL:', redirectUrl);
+    // Initialize WebBrowser
+    await WebBrowser.warmUpAsync();
     
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
@@ -137,6 +138,7 @@ export const signInWithOAuth = async (provider: 'google' | 'apple') => {
     if (error) throw error;
 
     if (data?.url) {
+      // Open browser for authentication
       const result = await WebBrowser.openAuthSessionAsync(
         data.url,
         redirectUrl,
@@ -145,6 +147,9 @@ export const signInWithOAuth = async (provider: 'google' | 'apple') => {
           preferEphemeralSession: true,
         }
       );
+
+      // Clean up browser resources
+      await WebBrowser.coolDownAsync();
 
       if (result.type === 'success') {
         const { url } = result;

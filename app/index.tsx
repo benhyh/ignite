@@ -52,7 +52,9 @@ export default function Index() {
 
   useEffect(() => {
     if (!isLoading && user) {
-      router.replace('/(tabs)/home');
+      // Check if the user has completed the questionnaire
+      // If not, redirect to questionnaire
+      router.replace('/questionnaire');
     }
   }, [isLoading, user]);
 
@@ -81,8 +83,12 @@ export default function Index() {
   const handleGoogleSignIn = async () => {
     try {
       const { error } = await signInWithOAuth('google');
+      
       if (error) { 
         Alert.alert('Error', 'Failed to sign in with Google. Please try again.');
+      } else {
+        // Redirect to questionnaire page after successful login
+        router.replace('/questionnaire');
       }
     } catch (error) {
       Alert.alert('Error', 'Failed to sign in with Google');

@@ -59,7 +59,7 @@ export default function Questionnaire() {
             if (currentIndex + 1 >= questions.length) {
               setShowPostQuestionnaire(true);
               setTimeout(() => {
-                router.replace('/sign-in');
+                router.replace('/(tabs)/home');
               }, 3000);
               return;
             }
@@ -75,7 +75,7 @@ export default function Questionnaire() {
             if (currentIndex + 1 >= questions.length) {
               setShowPostQuestionnaire(true);
               setTimeout(() => {
-                router.replace('/sign-in');
+                router.replace('/(tabs)/home');
               }, 3000);
               return;
             }

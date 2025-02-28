@@ -7,7 +7,9 @@ import { useAuth } from '../../lib/context/auth';
 
 export default function Settings() {
   const insets = useSafeAreaInsets();
-  const { signOut } = useAuth();
+  const { user, signOut } = useAuth();
+  const fullName = user?.user_metadata?.name;
+  const email = user?.user_metadata?.email;
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
@@ -33,8 +35,8 @@ export default function Settings() {
       >
         {/* User Info Section */}
         <View style={styles.userSection}>
-          <Text style={styles.userName}>Jane Doe</Text>
-          <Text style={styles.userEmail}>jdoe.mobbin1@gmail.com</Text>
+          <Text style={styles.userName}>{fullName}</Text>
+          <Text style={styles.userEmail}>{email}</Text>
         </View>
 
         {/* Account Section */}
