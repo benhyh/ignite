@@ -14,16 +14,17 @@ export default function Profile() {
   const bestStreak = 2; // This will come from user data later
   const unlockedBadges = badges.filter(badge => !badge.isLocked).length;
   const totalBadges = badges.length;
+  const userName = user?.user_metadata?.name || 'User';
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push('/(settings)/settings')}>
+        <TouchableOpacity onPress={() => router.replace('/(settings)/settings')}>
           <MaterialCommunityIcons name="cog" size={24} color="#FFF" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Profile</Text>
-        <TouchableOpacity onPress={() => router.push('/(settings)/notifications')}>
+        <TouchableOpacity onPress={() => router.replace('/(settings)/notifications')}>
           <MaterialCommunityIcons name="bell" size={24} color="#FFF" />
         </TouchableOpacity>
       </View>

@@ -8,11 +8,11 @@ import { useAuth } from '../../lib/context/auth';
 export default function Settings() {
   const insets = useSafeAreaInsets();
   const { user, signOut } = useAuth();
-  const fullName = user?.user_metadata?.name;
-  const email = user?.user_metadata?.email;
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
+  const fullName = user?.user_metadata?.name;
+  const email = user?.user_metadata?.email;
   
   const handleLogout = async () => {
     try {
@@ -24,13 +24,21 @@ export default function Settings() {
     }
   };
 
+  const handleBack = () => {
+    router.replace('/(tabs)/profile');
+  };
+
   return (
     // authentication merge
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
+        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+          <MaterialCommunityIcons name="arrow-left" size={24} color="#FFF" />
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>Settings</Text>
+        <View style={styles.headerRight} />
       </View>
-
+ 
       <ScrollView 
         style={styles.content}
         contentContainerStyle={[
@@ -205,5 +213,15 @@ const styles = StyleSheet.create({
     opacity: 0.5,
     fontFamily: 'Poppins',
     marginBottom: 4,
+  },
+  backButton: {
+    position: 'absolute',
+    left: 10,
+    top: 10,
+  },
+  headerRight: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
   },
 }); 

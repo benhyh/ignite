@@ -1,7 +1,7 @@
 import { useFonts, Poppins_700Bold } from '@expo-google-fonts/poppins';
 import { Image, View, Animated, TouchableOpacity, Text, StyleSheet, Modal, Dimensions, Alert } from "react-native";
 import { useEffect, useState, useRef } from "react";
-import { router } from 'expo-router';
+import { router, Redirect } from 'expo-router';
 import { useAuth } from '../lib/context/auth';
 import { signInWithOAuth } from '../lib/supabase/client';
 
@@ -51,14 +51,6 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    if (!isLoading && user) {
-      // Check if the user has completed the questionnaire
-      // If not, redirect to questionnaire
-      router.replace('/questionnaire');
-    }
-  }, [isLoading, user]);
-
-  useEffect(() => {
     if (!isLoading) {
       const interval = setInterval(() => {
         setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -96,6 +88,11 @@ export default function Index() {
   };
 
   if (!fontsLoaded) return null;
+
+  // Redirect to home if user is already logged in and loading is complete
+  if (!isLoading && user) {
+    return <Redirect href="/(tabs)/home" />;
+  }
 
   if (isLoading) {
     return (

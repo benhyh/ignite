@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 const NotificationCard = ({ title, description, isDismissible = true }: { title: string; description: string; isDismissible?: boolean }) => (
   <View style={styles.notificationCard}>
@@ -16,10 +18,17 @@ const NotificationCard = ({ title, description, isDismissible = true }: { title:
 );
 
 export default function Notifications() {
+  const handleBack = () => {
+    router.replace('/(tabs)/profile');
+  };
+  
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
+          <TouchableOpacity onPress={handleBack} style={styles.backButton}>
+            <MaterialCommunityIcons name="arrow-left" size={24} color="#FFF" />
+          </TouchableOpacity>
           <Text style={styles.title}>Notifications</Text>
         </View>
 
@@ -83,6 +92,12 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 28,
     fontFamily: 'Poppins-Bold',
+  },
+  backButton: {
+    padding: 8,
+  },
+  logoutButton: {
+    padding: 8,
   },
   settingsIcon: {
     width: 28,

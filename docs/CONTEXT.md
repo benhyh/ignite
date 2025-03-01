@@ -110,6 +110,37 @@ Grid-based memory challenges with progressive difficulty
 - Memory management
 - Battery efficiency
 
+### Animation Libraries
+- **React Native Reanimated** - High-performance animations that run on the UI thread
+  - Perfect for complex, gesture-based animations
+  - Seamless integration with Expo
+  - Worklet-based architecture for smooth 60fps animations
+
+- **React Native Animated** (built-in)
+  - Core animation library included with React Native
+  - Great for basic transitions, opacity, and transform animations
+  - Supports native driver for optimal performance
+
+- **Moti**
+  - Built on top of Reanimated 2
+  - Declarative API for common animations
+  - Simplified syntax for transitions and micro-interactions
+
+- **Lottie for React Native**
+  - Support for Adobe After Effects animations
+  - Perfect for complex illustrations and branded animations
+  - Lightweight JSON-based animation files
+
+- **React Native Skia**
+  - High-performance 2D graphics rendering
+  - Canvas-like API for custom drawings and animations
+  - Great for data visualizations and custom UI elements
+
+- **React Native Gesture Handler**
+  - Complements animation libraries with precise gesture recognition
+  - Native-driven gesture system
+  - Essential for interactive animations
+
 ### Security Features
 - End-to-end encryption for user data
 - Secure API communications

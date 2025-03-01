@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack } from "expo-router";
+import { Stack, useRouter, useSegments } from 'expo-router';
 import { useFonts, Poppins_700Bold, Poppins_400Regular } from '@expo-google-fonts/poppins';
 import { useEffect } from "react";
 import * as SplashScreen from 'expo-splash-screen';
@@ -16,6 +16,47 @@ const styles = StyleSheet.create({
     shadowOpacity: 0, // for iOS
   },
 });
+
+// Protected route component
+function ProtectedRouteWrapper({ children }: { children: React.ReactNode }) {
+  const { user, isLoading } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Skip protection during initial load
+    if (isLoading) return;
+
+    // Check if the current route should be protected
+    const inAuthGroup = segments[0] === '(auth)';
+    const inTabsGroup = segments[0] === '(tabs)';
+    const inSettingsGroup = segments[0] === '(settings)';
+    const isIndexRoute = segments.length === 1 && segments[0] === '';
+    const isQuestionnaireRoute = segments.length === 1 && segments[0] === 'questionnaire';
+
+    // Handle authentication redirects
+    if (!user) {
+      // If not logged in and trying to access protected route, redirect to index
+      if (inTabsGroup || inSettingsGroup) {
+        router.replace('/');
+      }
+    } else {
+      // If logged in and on auth routes, redirect to home
+      if (inAuthGroup || isIndexRoute) {
+        // Check if user has completed questionnaire (you'd need to add this logic)
+        const hasCompletedQuestionnaire = user.user_metadata?.completed_questionnaire;
+        
+        if (!hasCompletedQuestionnaire && !isQuestionnaireRoute) {
+          router.replace('/questionnaire');
+        } else if (hasCompletedQuestionnaire || isQuestionnaireRoute) {
+          router.replace('/(tabs)/home');
+        }
+      }
+    }
+  }, [user, isLoading, segments]);
+
+  return <>{children}</>;
+}
 
 function RootLayoutNav() { 
   const { user } = useAuth();
@@ -83,7 +124,9 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <RootLayoutNav />
+      <ProtectedRouteWrapper>
+        <RootLayoutNav />
+      </ProtectedRouteWrapper>
     </AuthProvider>
   );
 }
